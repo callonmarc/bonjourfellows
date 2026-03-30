@@ -14,7 +14,6 @@ if (menuToggle && siteNav) {
 // =========================================
 // Home page first-visit overlay
 // =========================================
-const ENTRY_OVERLAY_KEY = 'bonjour-entry-overlay-seen';
 const entryOverlay = document.getElementById('entryOverlay');
 const entryOverlayButton = document.getElementById('entryOverlayButton');
 const onHomePage = document.body.classList.contains('home-page');
@@ -22,6 +21,7 @@ const onHomePage = document.body.classList.contains('home-page');
 function closeEntryOverlay() {
   if (!entryOverlay) return;
   entryOverlay.classList.add('is-closing');
+  document.body.classList.remove('pre-entry');
   window.setTimeout(() => {
     entryOverlay.classList.add('is-hidden');
     entryOverlay.classList.remove('is-closing');
@@ -31,21 +31,11 @@ function closeEntryOverlay() {
 }
 
 if (onHomePage && entryOverlay && entryOverlayButton) {
-  const hasSeenOverlay = localStorage.getItem(ENTRY_OVERLAY_KEY) === 'true';
+  entryOverlay.classList.remove('is-hidden');
+  entryOverlay.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('overlay-open', 'pre-entry');
 
-  if (!hasSeenOverlay) {
-    entryOverlay.classList.remove('is-hidden');
-    entryOverlay.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('overlay-open');
-  } else {
-    entryOverlay.classList.add('is-hidden');
-    entryOverlay.setAttribute('aria-hidden', 'true');
-  }
-
-  entryOverlayButton.addEventListener('click', () => {
-    localStorage.setItem(ENTRY_OVERLAY_KEY, 'true');
-    closeEntryOverlay();
-  });
+  entryOverlayButton.addEventListener('click', closeEntryOverlay);
 }
 
 // =========================================
