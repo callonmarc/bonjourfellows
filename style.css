@@ -483,3 +483,39 @@ a {
     display: inline-block;
   }
 }
+
+
+/* =========================================
+   Gallery page
+========================================= */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.gallery-tile {
+  padding: 1rem;
+  background: linear-gradient(150deg, rgba(7, 8, 12, 0.84), rgba(13, 21, 62, 0.78));
+  border: 1px solid rgba(246, 240, 232, 0.16);
+  box-shadow: var(--shadow);
+}
+
+.gallery-placeholder {
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(246, 240, 232, 0.42);
+  background: linear-gradient(135deg, rgba(11, 31, 121, 0.22), rgba(186, 31, 52, 0.22));
+  color: rgba(246, 240, 232, 0.88);
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.08em;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
