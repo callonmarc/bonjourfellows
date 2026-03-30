@@ -101,37 +101,59 @@ function mountGritOverlays() {
 mountGritOverlays();
 
 // =========================================
-// Community wall: local storage-backed posts
+// Community wall: Supabase-backed posts
 // =========================================
 const wallForm = document.getElementById('wallForm');
 const noteWall = document.getElementById('noteWall');
-const WALL_KEY = 'bonjour-fellow-wall-posts';
+const messageInput = document.getElementById('message');
+const messageCounter = document.getElementById('messageCounter');
 
-function getStoredNotes() {
-  try {
-    const stored = localStorage.getItem(WALL_KEY);
-    if (!stored) return [];
-    const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+const supabaseClient = window.supabase?.createClient(
+  'https://rprfplqbocrzfjdmazfs.supabase.co',
+  'sb_publishable_oBaM2lmb4-hmfgSczpQ05g_ru8_GAJU'
+);
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
 }
 
-function saveNotes(notes) {
-  localStorage.setItem(WALL_KEY, JSON.stringify(notes));
+function getRelativeTime(createdAt) {
+  const created = new Date(createdAt);
+  const now = new Date();
+  const diffSeconds = Math.max(0, Math.floor((now.getTime() - created.getTime()) / 1000));
+
+  if (diffSeconds < 45) return 'just now';
+  if (diffSeconds < 3600) {
+    const mins = Math.floor(diffSeconds / 60);
+    return `${mins} min${mins === 1 ? '' : 's'} ago`;
+  }
+  if (diffSeconds < 86400) {
+    const hours = Math.floor(diffSeconds / 3600);
+    return `${hours} hour${hours === 1 ? '' : 's'} ago`;
+  }
+  const days = Math.floor(diffSeconds / 86400);
+  return `${days} day${days === 1 ? '' : 's'} ago`;
 }
 
 function createNoteMarkup(note, index) {
-  const tiltValues = ['-3deg', '-1deg', '2deg', '3deg', '-2deg'];
-  const tilt = tiltValues[index % tiltValues.length];
-  const author = note.name ? note.name : 'Anonymous';
+  const tilt = `${(Math.random() * 7 - 3.5).toFixed(2)}deg`;
+  const yOffset = `${Math.round(Math.random() * 8)}px`;
+  const tone = String((index % 4) + 1);
+  const delay = `${(index * 0.04).toFixed(2)}s`;
+  const author = note.name ? note.name : 'anonymous';
   const city = note.location ? ` · ${note.location}` : '';
+  const timestamp = note.created_at ? getRelativeTime(note.created_at) : 'just now';
 
   return `
-    <article class="note" style="--tilt:${tilt}">
-      <p>${note.message}</p>
-      <p class="note-footer">— ${author}${city}</p>
+    <article class="note note--tone-${tone}" style="--tilt:${tilt};--offset:${yOffset};--enter-delay:${delay}">
+      <p>${escapeHtml(note.message)}</p>
+      <p class="note-footer">— ${escapeHtml(author)}${escapeHtml(city)}</p>
+      <p class="note-time">${escapeHtml(timestamp)}</p>
     </article>
   `;
 }
@@ -141,13 +163,40 @@ function renderNotes(notes) {
   noteWall.innerHTML = notes.map((note, index) => createNoteMarkup(note, index)).join('');
 }
 
-if (noteWall) {
-  const notes = getStoredNotes();
-  renderNotes(notes);
+async function loadNotes() {
+  if (!supabaseClient || !noteWall) return;
+
+  const { data, error } = await supabaseClient
+    .from('messages')
+    .select('id, message, name, location, created_at')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Failed to fetch wall messages:', error);
+    return;
+  }
+
+  renderNotes(data || []);
 }
 
-if (wallForm && noteWall) {
-  wallForm.addEventListener('submit', (event) => {
+if (messageInput && messageCounter) {
+  const syncCounter = () => {
+    messageCounter.textContent = `${messageInput.value.length} / ${messageInput.maxLength}`;
+  };
+
+  messageInput.addEventListener('input', syncCounter);
+  syncCounter();
+}
+
+if (noteWall) {
+  if (!supabaseClient) {
+    console.error('Supabase client failed to initialize on wall page.');
+  }
+  loadNotes();
+}
+
+if (wallForm && noteWall && supabaseClient) {
+  wallForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(wallForm);
@@ -157,10 +206,22 @@ if (wallForm && noteWall) {
 
     if (!message) return;
 
-    const notes = getStoredNotes();
-    notes.unshift({ message, name, location });
-    saveNotes(notes.slice(0, 24));
-    renderNotes(notes.slice(0, 24));
+    const payload = {
+      message,
+      name: name || 'anonymous',
+      location: location || null
+    };
+
+    const { error } = await supabaseClient.from('messages').insert(payload);
+    if (error) {
+      console.error('Failed to insert wall message:', error);
+      return;
+    }
+
     wallForm.reset();
+    if (messageCounter) {
+      messageCounter.textContent = `0 / ${messageInput?.maxLength || 280}`;
+    }
+    await loadNotes();
   });
 }

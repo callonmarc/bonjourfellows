@@ -1047,6 +1047,10 @@ body .grit-overlay--scratches {
   padding: 1rem;
   position: sticky;
   top: 90px;
+  background:
+    linear-gradient(145deg, rgba(8, 9, 14, 0.92), rgba(8, 17, 47, 0.8)),
+    repeating-linear-gradient(35deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 6px);
+  border: 1px solid rgba(246, 240, 232, 0.24);
 }
 
 .wall-form h2 {
@@ -1064,44 +1068,144 @@ body .grit-overlay--scratches {
 .wall-form textarea,
 .wall-form input {
   width: 100%;
-  border: 1px solid rgba(246, 240, 232, 0.3);
-  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(246, 240, 232, 0.24);
+  background:
+    linear-gradient(165deg, rgba(0, 0, 0, 0.62), rgba(6, 11, 29, 0.74)),
+    repeating-linear-gradient(-42deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 5px);
   color: var(--cream);
   padding: 0.65rem;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.wall-form textarea:focus,
+.wall-form input:focus {
+  outline: none;
+  border-color: rgba(186, 31, 52, 0.88);
+  box-shadow:
+    0 0 0 1px rgba(186, 31, 52, 0.75),
+    0 0 20px rgba(186, 31, 52, 0.25);
+  transform: translateY(-1px);
+}
+
+.char-counter {
+  margin: 0.4rem 0 0.85rem;
+  text-align: right;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: rgba(246, 240, 232, 0.72);
 }
 
 .note-wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.7rem 0.9rem;
+  padding-bottom: 1rem;
 }
 
 .note {
-  min-height: 160px;
-  padding: 0.9rem;
-  transform: rotate(var(--tilt, -1deg));
+  flex: 1 1 clamp(190px, 32%, 260px);
+  min-height: 176px;
+  max-width: 300px;
+  padding: 1rem 1rem 0.9rem;
+  color: #1f1d17;
+  transform: translateY(var(--offset, 0px)) rotate(var(--tilt, -1deg));
   position: relative;
+  border: 1px solid rgba(20, 16, 11, 0.26);
+  box-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.4) inset,
+    0 14px 18px rgba(0, 0, 0, 0.32),
+    0 24px 40px rgba(0, 0, 0, 0.22);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease;
+  animation: noteEnter 0.5s ease both;
+  animation-delay: var(--enter-delay, 0s);
+}
+
+.note:hover {
+  z-index: 6;
+  transform: translateY(calc(var(--offset, 0px) - 4px)) scale(1.03) rotate(var(--tilt, -1deg));
+  box-shadow:
+    0 2px 0 rgba(255, 255, 255, 0.5) inset,
+    0 18px 28px rgba(0, 0, 0, 0.4),
+    0 32px 48px rgba(0, 0, 0, 0.32);
 }
 
 .note::before {
   content: "";
   position: absolute;
-  top: -8px;
+  top: -10px;
   left: 50%;
-  width: 28px;
-  height: 10px;
+  width: 42px;
+  height: 14px;
   transform: translateX(-50%) rotate(-4deg);
-  background: rgba(246, 240, 232, 0.65);
+  background: linear-gradient(180deg, rgba(244, 239, 221, 0.85), rgba(221, 209, 166, 0.75));
+  border: 1px solid rgba(17, 17, 17, 0.15);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.24);
+}
+
+.note::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(27deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 4px),
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.18), transparent 45%),
+    radial-gradient(circle at 86% 74%, rgba(0, 0, 0, 0.06), transparent 44%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  opacity: 0.62;
 }
 
 .note p {
   margin: 0;
+  line-height: 1.35;
+}
+
+.note p:first-child {
+  font-size: 1.04rem;
 }
 
 .note-footer {
   margin-top: 1rem;
-  font-size: 0.8rem;
-  opacity: 0.8;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.78;
+}
+
+.note-time {
+  margin-top: 0.3rem !important;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.56;
+}
+
+.note--tone-1 {
+  background: linear-gradient(167deg, #f8e9ca 0%, #efdcb7 100%);
+}
+
+.note--tone-2 {
+  background: linear-gradient(167deg, #f3e5bc 0%, #ddc79f 100%);
+}
+
+.note--tone-3 {
+  background: linear-gradient(167deg, #efe2bf 0%, #d5bf94 100%);
+}
+
+.note--tone-4 {
+  background: linear-gradient(167deg, #f6e8c5 0%, #e3cfa8 100%);
+}
+
+@keyframes noteEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) rotate(var(--tilt, -1deg));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(var(--offset, 0px)) rotate(var(--tilt, -1deg));
+  }
 }
 
 /* =========================================
@@ -1133,6 +1237,10 @@ body .grit-overlay--scratches {
   .wall-form {
     position: relative;
     top: 0;
+  }
+
+  .note {
+    flex-basis: min(100%, 270px);
   }
 
   .hero-art {
