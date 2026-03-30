@@ -20,6 +20,7 @@ const onHomePage = document.body.classList.contains('home-page');
 
 function closeEntryOverlay() {
   if (!entryOverlay) return;
+  entryOverlayButton?.setAttribute('disabled', 'true');
   entryOverlay.classList.add('is-closing');
   document.body.classList.remove('pre-entry');
   window.setTimeout(() => {
@@ -27,7 +28,7 @@ function closeEntryOverlay() {
     entryOverlay.classList.remove('is-closing');
     entryOverlay.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('overlay-open');
-  }, 500);
+  }, 760);
 }
 
 if (onHomePage && entryOverlay && entryOverlayButton) {
