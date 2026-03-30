@@ -12,6 +12,43 @@ if (menuToggle && siteNav) {
 }
 
 // =========================================
+// Home page first-visit overlay
+// =========================================
+const ENTRY_OVERLAY_KEY = 'bonjour-entry-overlay-seen';
+const entryOverlay = document.getElementById('entryOverlay');
+const entryOverlayButton = document.getElementById('entryOverlayButton');
+const onHomePage = document.body.classList.contains('home-page');
+
+function closeEntryOverlay() {
+  if (!entryOverlay) return;
+  entryOverlay.classList.add('is-closing');
+  window.setTimeout(() => {
+    entryOverlay.classList.add('is-hidden');
+    entryOverlay.classList.remove('is-closing');
+    entryOverlay.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('overlay-open');
+  }, 500);
+}
+
+if (onHomePage && entryOverlay && entryOverlayButton) {
+  const hasSeenOverlay = localStorage.getItem(ENTRY_OVERLAY_KEY) === 'true';
+
+  if (!hasSeenOverlay) {
+    entryOverlay.classList.remove('is-hidden');
+    entryOverlay.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('overlay-open');
+  } else {
+    entryOverlay.classList.add('is-hidden');
+    entryOverlay.setAttribute('aria-hidden', 'true');
+  }
+
+  entryOverlayButton.addEventListener('click', () => {
+    localStorage.setItem(ENTRY_OVERLAY_KEY, 'true');
+    closeEntryOverlay();
+  });
+}
+
+// =========================================
 // Community wall: seed messages + local storage
 // =========================================
 const wallForm = document.getElementById('wallForm');
