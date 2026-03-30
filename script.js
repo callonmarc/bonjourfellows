@@ -39,6 +39,42 @@ if (onHomePage && entryOverlay && entryOverlayButton) {
 }
 
 // =========================================
+// Shared floating "bonjour" background accents
+// =========================================
+function mountFloatingBonjour() {
+  if (document.querySelector('.floating-bonjour-layer')) return;
+
+  const floatingLayer = document.createElement('div');
+  floatingLayer.className = 'floating-bonjour-layer';
+  floatingLayer.setAttribute('aria-hidden', 'true');
+
+  const placements = [
+    { x: 8, y: 16, size: 'clamp(2.5rem, 8vw, 5rem)', duration: '20s', delay: '-2s' },
+    { x: 68, y: 14, size: 'clamp(2rem, 6.5vw, 4rem)', duration: '17s', delay: '-8s' },
+    { x: 22, y: 48, size: 'clamp(2.8rem, 7.5vw, 4.7rem)', duration: '22s', delay: '-3s' },
+    { x: 74, y: 42, size: 'clamp(2.2rem, 7vw, 4.3rem)', duration: '19s', delay: '-10s' },
+    { x: 12, y: 74, size: 'clamp(2rem, 6vw, 3.8rem)', duration: '18s', delay: '-5s' },
+    { x: 62, y: 78, size: 'clamp(2.4rem, 8vw, 4.8rem)', duration: '23s', delay: '-12s' }
+  ];
+
+  placements.forEach((item) => {
+    const word = document.createElement('span');
+    word.className = 'floating-bonjour';
+    word.textContent = 'bonjour';
+    word.style.left = `${item.x}%`;
+    word.style.top = `${item.y}%`;
+    word.style.fontSize = item.size;
+    word.style.setProperty('--duration', item.duration);
+    word.style.setProperty('--delay', item.delay);
+    floatingLayer.appendChild(word);
+  });
+
+  document.body.appendChild(floatingLayer);
+}
+
+mountFloatingBonjour();
+
+// =========================================
 // Community wall: seed messages + local storage
 // =========================================
 const wallForm = document.getElementById('wallForm');
