@@ -1,5 +1,5 @@
 /* =========================================
-   Bonjour fellow - Global Design System
+   bonjourblowup - Global Design System
 ========================================= */
 :root {
   --blue: #0b1f79;
@@ -158,6 +158,10 @@ a {
   max-width: 680px;
   font-size: clamp(1rem, 2.3vw, 1.22rem);
   color: rgba(246, 240, 232, 0.95);
+}
+
+.hero-title {
+  font-size: clamp(2rem, 8vw, 4.5rem) !important;
 }
 
 .hero-art {
@@ -363,6 +367,45 @@ a {
 }
 
 /* =========================================
+   Rebuilt shop page
+========================================= */
+.shop-page {
+  max-width: 1200px;
+}
+
+.france-flag-shop {
+  margin-top: 1.2rem;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid rgba(246, 240, 232, 0.22);
+  box-shadow: var(--shadow);
+  background: linear-gradient(
+    90deg,
+    rgba(11, 31, 121, 0.82) 0%,
+    rgba(11, 31, 121, 0.82) 33.333%,
+    rgba(246, 240, 232, 0.92) 33.333%,
+    rgba(246, 240, 232, 0.92) 66.666%,
+    rgba(186, 31, 52, 0.85) 66.666%,
+    rgba(186, 31, 52, 0.85) 100%
+  );
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.shirt-placeholder {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  text-transform: uppercase;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.08em;
+  font-size: 1.3rem;
+  color: #f6f0e8;
+  border: 1px dashed rgba(246, 240, 232, 0.6);
+  background: rgba(8, 9, 14, 0.56);
+}
+
+/* =========================================
    Community wall
 ========================================= */
 .wall-layout {
@@ -448,6 +491,10 @@ a {
   }
 
   .statement-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .france-flag-shop {
     grid-template-columns: 1fr;
   }
 
