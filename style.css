@@ -400,7 +400,7 @@ body .grit-overlay--scratches {
 }
 
 .hero-art--left {
-  left: -2%;
+  left: 3%;
   bottom: 10%;
   --hero-image: url("images/bonjour-1.png");
   --ghost-x: 16px;
@@ -409,7 +409,7 @@ body .grit-overlay--scratches {
 }
 
 .hero-art--right {
-  right: -4%;
+  right: 2%;
   top: 13%;
   transform: rotate(12deg) scale(1.05);
   --hero-image: url("images/bonjour-2.png");

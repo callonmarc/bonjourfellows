@@ -49,7 +49,7 @@ function mountFloatingBonjour() {
   floatingLayer.className = 'floating-bonjour-layer';
   floatingLayer.setAttribute('aria-hidden', 'true');
 
-  const words = ['bonjour', 'blowup', 'bonjour', 'street', 'paris', 'atl', 'bonjour', 'raw'];
+  const words = ['bonjour', 'bonjour', 'bonjour', 'bonjour', 'bonjour', 'blowup', 'bonjour', 'bonjour'];
   const placements = Array.from({ length: 12 }, (_, index) => ({
     word: words[index % words.length],
     x: Math.round(6 + Math.random() * 84),
