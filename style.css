@@ -326,7 +326,8 @@ body::before {
 
 .entry-overlay__panel {
   position: relative;
-  width: min(92vw, 460px);
+  width: min(96vw, 1500px);
+  height: min(94vh, 980px);
   isolation: isolate;
   padding: 0;
   transform: scale(0.88) translateY(32px) rotateX(6deg);
@@ -334,47 +335,75 @@ body::before {
   animation: enterPanel 0.9s cubic-bezier(0.2, 0.9, 0.2, 1.06) forwards;
 }
 
-.entry-overlay__image-stack {
+.entry-overlay__popups {
   position: relative;
-  min-height: min(62vh, 540px);
-}
-
-.entry-overlay__image {
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: min(62vh, 540px);
-  object-fit: cover;
+  height: 100%;
+}
+
+.entry-overlay__popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(90vw, 1320px);
+  height: min(86vh, 920px);
+  object-fit: contain;
+  object-position: center;
   border: 0;
+  background: rgba(8, 9, 15, 0.68);
+  padding: clamp(0.2rem, 0.75vw, 0.55rem);
   box-shadow: 0 22px 55px rgba(0, 0, 0, 0.58);
+  border: 1px solid rgba(246, 240, 232, 0.2);
+  animation: popupJitter 0.75s steps(2, end) infinite;
 }
 
-.entry-overlay__image--main {
-  z-index: 4;
-}
-
-.entry-overlay__image--ghost-a,
-.entry-overlay__image--ghost-b,
-.entry-overlay__image--ghost-c {
-  opacity: 0;
-  mix-blend-mode: screen;
-  filter: contrast(1.35) saturate(1.1);
-  animation: ghostImageHack 1.2s steps(2, end) infinite;
-}
-
-.entry-overlay__image--ghost-a {
-  z-index: 3;
-  animation-delay: -0.22s;
-}
-
-.entry-overlay__image--ghost-b {
-  z-index: 2;
-  animation-delay: -0.55s;
-}
-
-.entry-overlay__image--ghost-c {
+.entry-overlay__popup--1 {
   z-index: 1;
-  animation-delay: -0.87s;
+  transform: translate(-52%, -50%) rotate(-9deg);
+  opacity: 0.52;
+  animation-delay: -0.63s;
+}
+
+.entry-overlay__popup--2 {
+  z-index: 2;
+  transform: translate(-48%, -52%) rotate(7deg);
+  opacity: 0.58;
+  animation-delay: -0.35s;
+}
+
+.entry-overlay__popup--3 {
+  z-index: 3;
+  transform: translate(-50%, -49%) rotate(-4deg);
+  opacity: 0.62;
+  animation-delay: -0.15s;
+}
+
+.entry-overlay__popup--4 {
+  z-index: 4;
+  transform: translate(-50%, -51%) rotate(5deg);
+  opacity: 0.68;
+  animation-delay: -0.54s;
+}
+
+.entry-overlay__popup--5 {
+  z-index: 5;
+  transform: translate(-50.5%, -50.5%) rotate(-2deg);
+  opacity: 0.74;
+  animation-delay: -0.82s;
+}
+
+.entry-overlay__popup--6 {
+  z-index: 6;
+  transform: translate(-49.5%, -50%) rotate(2deg);
+  opacity: 0.96;
+  animation-delay: -0.25s;
+}
+
+.entry-overlay__actions {
+  width: min(92vw, 460px);
+  margin-top: auto;
+  margin-bottom: 0.8rem;
+  z-index: 9;
 }
 
 .entry-overlay__button {
@@ -382,7 +411,7 @@ body::before {
   overflow: hidden;
   isolation: isolate;
   width: 100%;
-  margin-top: 0.85rem;
+  margin-top: 0;
   font-size: 1.22rem;
   letter-spacing: 0.08em;
   border: 1px solid rgba(246, 240, 232, 0.42);
@@ -422,7 +451,8 @@ body::before {
   animation: buttonBurst 0.55s ease-out forwards;
 }
 
-.entry-overlay.is-closing .entry-overlay__panel {
+.entry-overlay.is-closing .entry-overlay__panel,
+.entry-overlay.is-closing .entry-overlay__actions {
   animation: leavePanel 0.75s cubic-bezier(0.17, 0.84, 0.44, 1) forwards;
 }
 
@@ -502,6 +532,17 @@ body::before {
   }
 }
 
+@keyframes popupJitter {
+  0%,
+  100% {
+    filter: saturate(1) contrast(1);
+  }
+
+  50% {
+    filter: saturate(1.12) contrast(1.08);
+  }
+}
+
 @keyframes buttonHackPulse {
   0%, 70%, 100% {
     transform: translateY(0);
@@ -520,7 +561,8 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   .entry-overlay,
   .entry-overlay__panel,
-  .entry-overlay__image,
+  .entry-overlay__popup,
+  .entry-overlay__actions,
   .entry-overlay__button,
   .entry-overlay::before,
   .entry-overlay::after {
