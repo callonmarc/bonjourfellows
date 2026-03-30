@@ -276,11 +276,46 @@ body::before {
   display: grid;
   place-items: center;
   padding: 1rem;
-  background: rgba(5, 6, 12, 0.45);
-  backdrop-filter: blur(3px);
+  background:
+    radial-gradient(circle at 50% 10%, rgba(246, 240, 232, 0.18), transparent 48%),
+    radial-gradient(circle at 15% 80%, rgba(186, 31, 52, 0.25), transparent 42%),
+    radial-gradient(circle at 80% 25%, rgba(11, 31, 121, 0.34), transparent 46%),
+    rgba(5, 6, 12, 0.72);
+  backdrop-filter: blur(5px);
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  overflow: hidden;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+
+.entry-overlay::before,
+.entry-overlay::after {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.entry-overlay::before {
+  background:
+    conic-gradient(
+      from 40deg,
+      rgba(246, 240, 232, 0),
+      rgba(246, 240, 232, 0.24),
+      rgba(11, 31, 121, 0.1),
+      rgba(186, 31, 52, 0.2),
+      rgba(246, 240, 232, 0)
+    );
+  animation: overlaySweep 6s linear infinite;
+  opacity: 0.65;
+}
+
+.entry-overlay::after {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.24) 0.8px, transparent 0.8px);
+  background-size: 4px 4px;
+  animation: overlayNoise 0.3s steps(3, end) infinite;
+  opacity: 0.2;
 }
 
 .entry-overlay.is-hidden {
@@ -290,14 +325,25 @@ body::before {
 }
 
 .entry-overlay__panel {
+  position: relative;
+  isolation: isolate;
   width: min(92vw, 460px);
-  border: 1px solid rgba(246, 240, 232, 0.26);
-  background: rgba(4, 6, 16, 0.9);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.6);
-  padding: 0.8rem;
-  transform: scale(0.94) translateY(14px);
+  border: 1px solid rgba(246, 240, 232, 0.34);
+  background: linear-gradient(160deg, rgba(8, 13, 37, 0.95), rgba(21, 8, 22, 0.88));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+  padding: 0.9rem;
+  transform: scale(0.88) translateY(32px) rotateX(6deg);
   opacity: 0;
-  animation: enterPanel 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: enterPanel 0.9s cubic-bezier(0.2, 0.9, 0.2, 1.06) forwards;
+}
+
+.entry-overlay__panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(246, 240, 232, 0.14);
+  pointer-events: none;
+  z-index: 2;
 }
 
 .entry-overlay__image {
@@ -309,35 +355,114 @@ body::before {
 }
 
 .entry-overlay__button {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   width: 100%;
   margin-top: 0.85rem;
-  font-size: 1.3rem;
+  font-size: 1.22rem;
   letter-spacing: 0.08em;
+  border: 1px solid rgba(246, 240, 232, 0.42);
+  background:
+    linear-gradient(120deg, rgba(6, 12, 44, 0.7), rgba(186, 31, 52, 0.95) 60%, rgba(246, 240, 232, 0.18));
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 20px 34px rgba(0, 0, 0, 0.52);
+}
+
+.entry-overlay__button::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -160%;
+  width: 65%;
+  height: 150%;
+  background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.66), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+}
+
+.entry-overlay__button:hover::before,
+.entry-overlay__button:focus-visible::before {
+  left: 150%;
+}
+
+.entry-overlay__button:focus-visible {
+  outline: 2px solid rgba(246, 240, 232, 0.9);
+  outline-offset: 2px;
+}
+
+.entry-overlay.is-closing .entry-overlay__button {
+  animation: buttonBurst 0.55s ease-out forwards;
 }
 
 .entry-overlay.is-closing .entry-overlay__panel {
-  animation: leavePanel 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: leavePanel 0.75s cubic-bezier(0.17, 0.84, 0.44, 1) forwards;
 }
 
 @keyframes enterPanel {
   from {
-    transform: scale(0.9) translateY(24px);
+    transform: perspective(900px) scale(0.86) translateY(42px) rotateX(9deg);
     opacity: 0;
+    filter: blur(8px);
   }
   to {
-    transform: scale(1) translateY(0);
+    transform: perspective(900px) scale(1) translateY(0) rotateX(0deg);
     opacity: 1;
+    filter: blur(0);
   }
 }
 
 @keyframes leavePanel {
   from {
-    transform: scale(1) translateY(0);
+    transform: perspective(900px) scale(1) translateY(0) rotateX(0deg);
     opacity: 1;
   }
   to {
-    transform: scale(1.05) translateY(-12px);
+    transform: perspective(900px) scale(1.08) translateY(-24px) rotateX(-6deg);
     opacity: 0;
+  }
+}
+
+@keyframes buttonBurst {
+  from {
+    transform: scale(1);
+    filter: saturate(1);
+  }
+  to {
+    transform: scale(1.04);
+    filter: saturate(1.2) brightness(1.08);
+  }
+}
+
+@keyframes overlaySweep {
+  from {
+    transform: rotate(0deg) scale(1.05);
+  }
+  to {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+@keyframes overlayNoise {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-1%, 1%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-overlay,
+  .entry-overlay__panel,
+  .entry-overlay__button,
+  .entry-overlay::before,
+  .entry-overlay::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
