@@ -12,7 +12,12 @@
 <body class="home-page">
   <div class="entry-overlay is-hidden" id="entryOverlay" aria-hidden="true">
     <div class="entry-overlay__panel">
-      <img src="images/entershop.jpg" alt="bonjourblowup storefront entrance" class="entry-overlay__image" />
+      <div class="entry-overlay__image-stack" aria-hidden="true">
+        <img src="images/entershop.jpg" alt="" class="entry-overlay__image entry-overlay__image--ghost-a" />
+        <img src="images/entershop.jpg" alt="" class="entry-overlay__image entry-overlay__image--ghost-b" />
+        <img src="images/entershop.jpg" alt="" class="entry-overlay__image entry-overlay__image--ghost-c" />
+        <img src="images/entershop.jpg" alt="bonjourblowup storefront entrance" class="entry-overlay__image entry-overlay__image--main" />
+      </div>
       <button class="btn btn--solid entry-overlay__button" id="entryOverlayButton">Enter Shop</button>
     </div>
   </div>
