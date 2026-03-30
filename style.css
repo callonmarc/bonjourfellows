@@ -484,23 +484,40 @@ a {
   letter-spacing: 0.08em;
   font-size: 1.3rem;
   color: #f6f0e8;
-  border: 1px dashed rgba(246, 240, 232, 0.6);
-  background: rgba(8, 9, 14, 0.7);
-  overflow: hidden;
+  border: 1px solid rgba(246, 240, 232, 0.52);
+  border-radius: 16px;
+  background: linear-gradient(160deg, rgba(8, 9, 14, 0.88), rgba(8, 15, 43, 0.8));
+  box-shadow:
+    0 0 0 1px rgba(246, 240, 232, 0.1),
+    0 18px 30px rgba(0, 0, 0, 0.35);
+  overflow: visible;
 }
 
 .shirt-placeholder::before {
   content: "";
   position: absolute;
-  inset: -24%;
-  z-index: -1;
-  border-radius: 22px;
-  filter: blur(28px) saturate(1.15);
-  opacity: 0.95;
+  inset: -18px;
+  z-index: -2;
+  border-radius: 24px;
+  filter: blur(18px) saturate(1.2);
+  opacity: 1;
   background:
-    radial-gradient(circle at 16% 50%, rgba(11, 31, 121, 0.78), transparent 48%),
-    radial-gradient(circle at 50% 50%, rgba(246, 240, 232, 0.55), transparent 46%),
-    radial-gradient(circle at 84% 50%, rgba(186, 31, 52, 0.76), transparent 48%);
+    radial-gradient(circle at 16% 50%, rgba(11, 31, 121, 0.95), transparent 48%),
+    radial-gradient(circle at 50% 50%, rgba(246, 240, 232, 0.66), transparent 45%),
+    radial-gradient(circle at 84% 50%, rgba(186, 31, 52, 0.95), transparent 48%);
+}
+
+.shirt-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 16px;
+  box-shadow:
+    0 0 24px rgba(246, 240, 232, 0.2),
+    0 0 34px rgba(11, 31, 121, 0.32),
+    0 0 34px rgba(186, 31, 52, 0.32);
+  pointer-events: none;
 }
 
 /* =========================================
