@@ -76,38 +76,20 @@ function mountFloatingBonjour() {
 mountFloatingBonjour();
 
 // =========================================
-// Community wall: seed messages + local storage
+// Community wall: local storage-backed posts
 // =========================================
 const wallForm = document.getElementById('wallForm');
 const noteWall = document.getElementById('noteWall');
 const WALL_KEY = 'bonjour-fellow-wall-posts';
 
-const defaultNotes = [
-  {
-    message: 'I am building with patience and pressure.',
-    name: 'K.',
-    location: 'Atlanta'
-  },
-  {
-    message: 'The vision gets clearer every rep.',
-    name: 'Mila',
-    location: 'Decatur'
-  },
-  {
-    message: 'No gatekeeping. We all rise when we share.',
-    name: 'fellow',
-    location: 'Paris'
-  }
-];
-
 function getStoredNotes() {
   try {
     const stored = localStorage.getItem(WALL_KEY);
-    if (!stored) return defaultNotes;
+    if (!stored) return [];
     const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) && parsed.length ? parsed : defaultNotes;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return defaultNotes;
+    return [];
   }
 }
 
