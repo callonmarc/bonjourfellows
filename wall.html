@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bonjour fellow | Community Wall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="texture-layer texture-layer--noise" aria-hidden="true"></div>
+  <div class="texture-layer texture-layer--paint" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a href="index.html" class="brand-mark">Bonjour fellow</a>
+    <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">☰</button>
+    <nav class="site-nav">
+      <a href="about.html">About</a>
+      <a href="shop.html">Shop</a>
+      <a href="wall.html" class="active">Wall</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="inner-page">
+    <!-- Wall intro -->
+    <section class="page-intro">
+      <p class="eyebrow">COMMUNITY WALL</p>
+      <h1>Leave your mark. Drop your words.</h1>
+      <p>
+        A digital street wall for affirmations, goals, reminders, and raw thoughts.
+        Add yours and join the movement.
+      </p>
+    </section>
+
+    <section class="wall-layout">
+      <!-- Message submission form -->
+      <form class="wall-form" id="wallForm">
+        <h2>Post to the wall</h2>
+        <label for="message">Message*</label>
+        <textarea id="message" name="message" rows="5" placeholder="Write something bold..." required></textarea>
+
+        <label for="name">Name (optional)</label>
+        <input id="name" name="name" type="text" placeholder="Alias / Name" />
+
+        <label for="location">Location (optional)</label>
+        <input id="location" name="location" type="text" placeholder="City" />
+
+        <button class="btn btn--solid" type="submit">Pin Message</button>
+      </form>
+
+      <!-- Layered note wall output -->
+      <section class="note-wall" id="noteWall" aria-live="polite"></section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
