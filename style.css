@@ -32,6 +32,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  isolation: isolate;
 }
 
 body.overlay-open {
@@ -88,7 +89,7 @@ body::after {
   inset: 0;
   z-index: -3;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: 0.28;
   background-image:
     radial-gradient(circle at 12% 28%, rgba(255, 105, 180, 0.35) 0 2px, transparent 2.5px),
     radial-gradient(circle at 58% 72%, rgba(39, 255, 206, 0.35) 0 2px, transparent 2.5px),
@@ -101,7 +102,42 @@ body::after {
     );
   background-size: 260px 260px, 340px 340px, 240px 240px, 100% 100%;
   mix-blend-mode: screen;
-  filter: blur(0.35px);
+  filter: blur(0.35px) saturate(1.25);
+}
+
+body .grit-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+body .grit-overlay--dark {
+  z-index: -2;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+body .grit-overlay--grain {
+  z-index: 45;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, 0.6) 0.7px, transparent 0.8px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.45) 0.7px, transparent 0.8px);
+  background-size: 3px 3px, 5px 5px;
+  background-position: 0 0, 1px 2px;
+  animation: grainShift 0.18s steps(3, end) infinite;
+}
+
+body .grit-overlay--scratches {
+  z-index: 44;
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(82deg, transparent 0 16px, rgba(255, 255, 255, 0.18) 16px 17px, transparent 17px 40px),
+    repeating-linear-gradient(-42deg, transparent 0 22px, rgba(255, 255, 255, 0.14) 22px 23px, transparent 23px 54px),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.22), transparent 30%),
+    radial-gradient(circle at 70% 68%, rgba(255, 255, 255, 0.18), transparent 28%);
+  filter: blur(0.45px);
 }
 
 /* =========================================
@@ -116,10 +152,11 @@ body::after {
 
 .texture-layer--noise {
   z-index: -1;
-  opacity: 0.18;
+  opacity: 0.24;
   background-image: radial-gradient(rgba(255, 255, 255, 0.25) 0.8px, transparent 0.8px);
   background-size: 4px 4px;
   mix-blend-mode: soft-light;
+  animation: grainShift 0.22s steps(4, end) infinite;
 }
 
 .texture-layer--paint {
@@ -143,17 +180,17 @@ body::after {
   font-family: "Bebas Neue", sans-serif;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.54;
-  filter: contrast(1.15) saturate(1.18);
-  transform: rotate(var(--tilt, -4deg));
+  opacity: 0.5;
+  filter: contrast(1.12) saturate(1.26) blur(1.1px);
+  transform: rotate(var(--tilt, -4deg)) scale(var(--scale, 1.04));
   -webkit-text-stroke: 1px rgba(5, 10, 26, 0.92);
   text-shadow:
     0 2px 0 rgba(0, 0, 0, 0.55),
-    3px 3px 0 rgba(255, 73, 179, 0.32),
-    -3px -2px 0 rgba(64, 255, 212, 0.24),
-    0 0 18px rgba(255, 255, 255, 0.16),
+    5px 3px 0 rgba(255, 73, 179, 0.28),
+    -4px -2px 0 rgba(64, 255, 212, 0.3),
+    -1px 1px 18px rgba(255, 255, 255, 0.12),
     0 8px 26px rgba(0, 0, 0, 0.45);
-  animation: bonjourFloat var(--duration, 18s) ease-in-out infinite;
+  animation: bonjourFloat var(--duration, 18s) ease-in-out infinite, bonjourFlicker 2.4s steps(2, end) infinite;
   animation-delay: var(--delay, 0s);
   mix-blend-mode: screen;
 }
@@ -175,6 +212,22 @@ body::after {
   25% { transform: translate3d(18px, -24px, 0) rotate(0.5deg); }
   50% { transform: translate3d(-14px, -50px, 0) rotate(2deg); }
   75% { transform: translate3d(-22px, -20px, 0) rotate(-1.5deg); }
+}
+
+@keyframes bonjourFlicker {
+  0%,
+  100% {
+    opacity: 0.48;
+    filter: contrast(1.12) saturate(1.2) blur(1px);
+  }
+  38% {
+    opacity: 0.56;
+    filter: contrast(1.24) saturate(1.35) blur(1.35px);
+  }
+  74% {
+    opacity: 0.44;
+    filter: contrast(1.02) saturate(1.15) blur(1.15px);
+  }
 }
 
 /* =========================================
@@ -259,7 +312,11 @@ body::after {
   text-transform: uppercase;
   font-size: clamp(3.8rem, 14vw, 10rem);
   line-height: 0.95;
-  text-shadow: 0 6px 16px rgba(0, 0, 0, 0.65);
+  text-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.7),
+    -2px 1px 0 rgba(186, 31, 52, 0.4),
+    3px -2px 0 rgba(11, 31, 121, 0.38),
+    1px 2px 14px rgba(255, 255, 255, 0.18);
 }
 
 .hero-copy {
@@ -276,10 +333,10 @@ body::after {
 .hero-art {
   position: absolute;
   width: clamp(220px, 26vw, 380px);
-  opacity: 0.28;
-  filter: saturate(0) contrast(1.2) brightness(1.5);
+  opacity: 0.31;
+  filter: saturate(1.08) contrast(1.26) brightness(1.42);
   mix-blend-mode: screen;
-  transform: rotate(-8deg);
+  transform: rotate(-8deg) scale(1.04);
 }
 
 .hero-art img {
@@ -287,15 +344,45 @@ body::after {
   display: block;
 }
 
+.hero-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--hero-image);
+  background-size: cover;
+  background-position: center;
+  transform: translate(var(--ghost-x, 12px), var(--ghost-y, 8px)) rotate(var(--ghost-tilt, -2deg)) scale(1.06);
+  opacity: 0.35;
+  filter: saturate(1.35) contrast(1.35) brightness(1.22);
+  mix-blend-mode: overlay;
+}
+
 .hero-art--left {
   left: -2%;
   bottom: 10%;
+  --hero-image: url("images/bonjour-1.png");
+  --ghost-x: 16px;
+  --ghost-y: 10px;
+  --ghost-tilt: -4deg;
 }
 
 .hero-art--right {
   right: -4%;
   top: 13%;
-  transform: rotate(12deg);
+  transform: rotate(12deg) scale(1.05);
+  --hero-image: url("images/bonjour-2.png");
+  --ghost-x: -14px;
+  --ghost-y: 12px;
+  --ghost-tilt: 3deg;
+  mix-blend-mode: overlay;
+}
+
+@keyframes grainShift {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-1%, 1%, 0); }
+  50% { transform: translate3d(1%, -1%, 0); }
+  75% { transform: translate3d(0.5%, 1.2%, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* =========================================

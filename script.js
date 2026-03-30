@@ -76,6 +76,20 @@ function mountFloatingBonjour() {
 
 mountFloatingBonjour();
 
+function mountGritOverlays() {
+  if (document.querySelector('.grit-overlay--dark')) return;
+
+  const layers = ['dark', 'scratches', 'grain'];
+  layers.forEach((layer) => {
+    const overlay = document.createElement('div');
+    overlay.className = `grit-overlay grit-overlay--${layer}`;
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(overlay);
+  });
+}
+
+mountGritOverlays();
+
 // =========================================
 // Community wall: local storage-backed posts
 // =========================================
