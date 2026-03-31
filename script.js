@@ -20,15 +20,20 @@ const onHomePage = document.body.classList.contains('home-page');
 
 function closeEntryOverlay() {
   if (!entryOverlay) return;
-  entryOverlayButton?.setAttribute('disabled', 'true');
-  entryOverlay.classList.add('is-closing');
-  document.body.classList.remove('pre-entry');
-  window.setTimeout(() => {
+
+  const finalizeOverlayClose = () => {
     entryOverlay.classList.add('is-hidden');
     entryOverlay.classList.remove('is-closing');
     entryOverlay.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('overlay-open');
-  }, 760);
+  };
+
+  entryOverlayButton?.setAttribute('disabled', 'true');
+  entryOverlay.classList.add('is-closing');
+  document.body.classList.remove('pre-entry');
+
+  entryOverlay.addEventListener('transitionend', finalizeOverlayClose, { once: true });
+  window.setTimeout(finalizeOverlayClose, 620);
 }
 
 if (onHomePage && entryOverlay && entryOverlayButton) {
