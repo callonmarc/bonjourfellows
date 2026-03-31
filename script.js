@@ -104,21 +104,41 @@ mountGritOverlays();
 // Shop page: interactive placeholder cards
 // =========================================
 const shirtCards = document.querySelectorAll('.shirt-placeholder');
+const supportsHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-shirtCards.forEach((card) => {
-  card.addEventListener('pointermove', (event) => {
-    const rect = card.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
-    const rotateY = x * 5;
-    const rotateX = -y * 4;
-    card.style.transform = `translateY(-6px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
-  });
+if (supportsHover) {
+  shirtCards.forEach((card) => {
+    let nextTransform = '';
+    let rafId = null;
 
-  card.addEventListener('pointerleave', () => {
-    card.style.transform = '';
+    const flushTransform = () => {
+      card.style.transform = nextTransform;
+      rafId = null;
+    };
+
+    card.addEventListener('pointermove', (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+      const rotateY = x * 5;
+      const rotateX = -y * 4;
+      nextTransform = `translateY(-10px) scale(1.015) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+
+      if (rafId === null) {
+        rafId = window.requestAnimationFrame(flushTransform);
+      }
+    });
+
+    card.addEventListener('pointerleave', () => {
+      nextTransform = '';
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      card.style.transform = '';
+    });
   });
-});
+}
 
 // =========================================
 // Community wall: Supabase-backed posts
