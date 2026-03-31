@@ -16,15 +16,12 @@ if (menuToggle && siteNav) {
 // =========================================
 const entryOverlay = document.getElementById('entryOverlay');
 const entryOverlayButton = document.getElementById('entryOverlayButton');
-const heroEnterShopLink = document.querySelector('.hero .btn.btn--solid[href="shop.html"]');
 const shopPreviewAudio = document.getElementById('shopPreviewAudio');
 const onHomePage = document.body.classList.contains('home-page');
-const SHOP_URL = 'shop.html';
-const SHOP_TRANSITION_MS = 740;
-const MIN_AUDIO_PLAY_MS = 280;
-const AUDIO_FADE_IN_MS = 160;
-const AUDIO_FADE_OUT_MS = 220;
-let isShopNavigationInProgress = false;
+const AUDIO_CLIP_TARGET_MS = 7000;
+const AUDIO_FADE_IN_MS = 550;
+const AUDIO_FADE_OUT_MS = 850;
+let isOverlayTransitionInProgress = false;
 
 function closeEntryOverlay() {
   if (!entryOverlay) return;
@@ -90,12 +87,13 @@ async function playShopPreviewSnippet() {
   }
 }
 
-async function stopShopPreviewSnippet(playStartedAt) {
+async function stopShopPreviewSnippet(playStartedAt, totalPlayMs = AUDIO_CLIP_TARGET_MS) {
   if (!shopPreviewAudio || shopPreviewAudio.paused) return;
 
   const elapsed = performance.now() - playStartedAt;
-  if (elapsed < MIN_AUDIO_PLAY_MS) {
-    await new Promise((resolve) => window.setTimeout(resolve, MIN_AUDIO_PLAY_MS - elapsed));
+  const holdMs = Math.max(0, totalPlayMs - AUDIO_FADE_OUT_MS);
+  if (elapsed < holdMs) {
+    await new Promise((resolve) => window.setTimeout(resolve, holdMs - elapsed));
   }
 
   await fadeAudioVolume(shopPreviewAudio, 0, AUDIO_FADE_OUT_MS);
@@ -103,26 +101,30 @@ async function stopShopPreviewSnippet(playStartedAt) {
   shopPreviewAudio.currentTime = 0;
 }
 
-async function transitionToShop(event) {
+async function enterHomepage(event) {
   event?.preventDefault();
 
-  if (isShopNavigationInProgress) return;
-  isShopNavigationInProgress = true;
+  if (isOverlayTransitionInProgress) return;
+  isOverlayTransitionInProgress = true;
   entryOverlayButton?.setAttribute('disabled', 'true');
-  heroEnterShopLink?.setAttribute('aria-disabled', 'true');
   document.body.classList.add('shop-audio-active');
 
   const audioStartTime = await playShopPreviewSnippet();
+  const durationMs = Number.isFinite(shopPreviewAudio?.duration)
+    ? Math.min(AUDIO_CLIP_TARGET_MS, Math.round(shopPreviewAudio.duration * 1000))
+    : AUDIO_CLIP_TARGET_MS;
+
   if (entryOverlay && !entryOverlay.classList.contains('is-hidden')) {
     closeEntryOverlay();
   }
 
   window.setTimeout(async () => {
     if (typeof audioStartTime === 'number') {
-      await stopShopPreviewSnippet(audioStartTime);
+      await stopShopPreviewSnippet(audioStartTime, durationMs);
     }
-    window.location.href = SHOP_URL;
-  }, SHOP_TRANSITION_MS);
+    document.body.classList.remove('shop-audio-active');
+    isOverlayTransitionInProgress = false;
+  }, 0);
 }
 
 if (onHomePage && entryOverlay && entryOverlayButton) {
@@ -130,11 +132,7 @@ if (onHomePage && entryOverlay && entryOverlayButton) {
   entryOverlay.setAttribute('aria-hidden', 'false');
   document.body.classList.add('overlay-open', 'pre-entry');
 
-  entryOverlayButton.addEventListener('click', transitionToShop);
-}
-
-if (onHomePage && heroEnterShopLink) {
-  heroEnterShopLink.addEventListener('click', transitionToShop);
+  entryOverlayButton.addEventListener('click', enterHomepage);
 }
 
 // =========================================
