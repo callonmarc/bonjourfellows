@@ -49,6 +49,11 @@ body.home-page.pre-entry > *:not(.entry-overlay) {
   user-select: none;
 }
 
+body.home-page.entering-shop > *:not(.entry-overlay) {
+  filter: blur(0) saturate(1.08);
+  opacity: 1;
+}
+
 h1,
 h2,
 h3,
@@ -468,7 +473,7 @@ body .grit-overlay--scratches {
   opacity: 1;
   visibility: visible;
   overflow: hidden;
-  transition: opacity 0.56s ease, visibility 0.56s ease;
+  transition: opacity 0.82s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.82s cubic-bezier(0.22, 1, 0.36, 1), backdrop-filter 0.82s ease;
   will-change: opacity;
 }
 
@@ -506,7 +511,7 @@ body .grit-overlay--scratches {
   padding: 0 0 1.1rem;
   transform: scale(0.88) translateY(32px) rotateX(6deg);
   opacity: 0;
-  animation: enterPanel 0.8s cubic-bezier(0.2, 0.9, 0.2, 1.06) forwards;
+  animation: enterPanel 1.02s cubic-bezier(0.2, 0.9, 0.2, 1.06) forwards;
   will-change: transform, opacity;
 }
 
@@ -631,13 +636,20 @@ body .grit-overlay--scratches {
 
 .entry-overlay.is-closing .entry-overlay__panel,
 .entry-overlay.is-closing .entry-overlay__actions {
-  animation: leavePanel 0.56s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: leavePanel 0.78s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.entry-overlay.is-closing .entry-overlay__popup,
+.entry-overlay.is-closing .entry-overlay__popup {
+  animation: popupSettle 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 .entry-overlay.is-closing::before,
 .entry-overlay.is-closing::after {
   animation: none;
+}
+
+.entry-overlay.is-closing {
+  backdrop-filter: blur(9px);
 }
 
 @keyframes enterPanel {
@@ -661,6 +673,17 @@ body .grit-overlay--scratches {
   to {
     transform: translate3d(0, -16px, 0) scale(1.02);
     opacity: 0;
+  }
+}
+
+@keyframes popupSettle {
+  from {
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    filter: blur(3px);
+    transform: translate(-50%, -50%) scale(1.02);
   }
 }
 
