@@ -101,6 +101,26 @@ function mountGritOverlays() {
 mountGritOverlays();
 
 // =========================================
+// Shop page: interactive placeholder cards
+// =========================================
+const shirtCards = document.querySelectorAll('.shirt-placeholder');
+
+shirtCards.forEach((card) => {
+  card.addEventListener('pointermove', (event) => {
+    const rect = card.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+    const rotateY = x * 5;
+    const rotateX = -y * 4;
+    card.style.transform = `translateY(-6px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+  });
+
+  card.addEventListener('pointerleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// =========================================
 // Community wall: Supabase-backed posts
 // =========================================
 const wallForm = document.getElementById('wallForm');
@@ -155,6 +175,7 @@ function createNoteMarkup(note, index) {
       <p class="note-footer">— ${escapeHtml(author)}${escapeHtml(city)}</p>
       <p class="note-time">${escapeHtml(timestamp)}</p>
       <p class="note-stamp">I'm a bonjour fellow</p>
+      <span class="note-france-stamp" aria-hidden="true"></span>
     </article>
   `;
 }

@@ -983,7 +983,11 @@ body .grit-overlay--scratches {
   isolation: isolate;
   min-height: 220px;
   display: grid;
-  place-items: center;
+  grid-template-rows: auto 1fr auto auto auto;
+  align-items: center;
+  justify-items: center;
+  gap: 0.55rem;
+  padding: 1rem 1rem 1.2rem;
   text-transform: uppercase;
   font-family: "Bebas Neue", sans-serif;
   letter-spacing: 0.08em;
@@ -996,14 +1000,96 @@ body .grit-overlay--scratches {
     0 0 0 1px rgba(246, 240, 232, 0.1),
     0 18px 30px rgba(0, 0, 0, 0.35);
   overflow: visible;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease, border-color 0.35s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .shirt-placeholder:hover {
   transform: translateY(-6px);
+  border-color: rgba(246, 240, 232, 0.76);
   box-shadow:
     0 0 0 1px rgba(246, 240, 232, 0.18),
     0 26px 38px rgba(0, 0, 0, 0.42);
+}
+
+.shirt-badge {
+  margin: 0;
+  align-self: start;
+  justify-self: start;
+  font-size: 0.72rem;
+  line-height: 1;
+  color: rgba(246, 240, 232, 0.96);
+  background: linear-gradient(135deg, rgba(186, 31, 52, 0.85), rgba(11, 31, 121, 0.78));
+  border: 1px solid rgba(246, 240, 232, 0.42);
+  border-radius: 999px;
+  padding: 0.35rem 0.55rem;
+  letter-spacing: 0.11em;
+}
+
+.shirt-silhouette {
+  width: min(200px, 88%);
+  aspect-ratio: 1 / 1.05;
+  position: relative;
+  border-radius: 22px;
+  border: 1px dashed rgba(246, 240, 232, 0.35);
+  background:
+    linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+    radial-gradient(circle at 30% 22%, rgba(246, 240, 232, 0.23), transparent 40%);
+}
+
+.shirt-silhouette::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64%;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  clip-path: polygon(18% 8%, 35% 8%, 42% 16%, 58% 16%, 65% 8%, 82% 8%, 92% 28%, 77% 38%, 72% 94%, 28% 94%, 23% 38%, 8% 28%);
+  border-radius: 14px;
+  background: linear-gradient(158deg, rgba(246, 240, 232, 0.5), rgba(246, 240, 232, 0.12));
+  box-shadow:
+    inset 0 0 0 1px rgba(246, 240, 232, 0.42),
+    0 12px 16px rgba(0, 0, 0, 0.25);
+}
+
+.shirt-placeholder h2,
+.shirt-price,
+.shirt-cta {
+  margin: 0;
+}
+
+.shirt-placeholder h2 {
+  font-size: 1.35rem;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.shirt-price {
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  color: rgba(246, 240, 232, 0.88);
+}
+
+.shirt-cta {
+  border: 1px solid rgba(246, 240, 232, 0.52);
+  background: linear-gradient(135deg, rgba(186, 31, 52, 0.64), rgba(11, 31, 121, 0.66));
+  color: var(--cream);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  text-transform: uppercase;
+  font-family: "Bebas Neue", sans-serif;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.shirt-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(186, 31, 52, 0.78), rgba(11, 31, 121, 0.8));
 }
 
 .shirt-placeholder::before {
@@ -1214,6 +1300,37 @@ body .grit-overlay--scratches {
   mix-blend-mode: multiply;
   pointer-events: none;
   opacity: 0.62;
+}
+
+.note-france-stamp {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.45rem;
+  width: 34px;
+  height: 26px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #1a2f9a 0 33.3%, #f5eddc 33.3% 66.6%, #b31f34 66.6% 100%);
+  border: 1px solid rgba(28, 18, 14, 0.42);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.34);
+  overflow: hidden;
+}
+
+.note-france-stamp::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px dashed rgba(58, 40, 24, 0.38);
+  border-radius: 5px;
+}
+
+.note-france-stamp::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
 }
 
 .note p {
