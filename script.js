@@ -154,6 +154,7 @@ function createNoteMarkup(note, index) {
       <p>${escapeHtml(note.message)}</p>
       <p class="note-footer">— ${escapeHtml(author)}${escapeHtml(city)}</p>
       <p class="note-time">${escapeHtml(timestamp)}</p>
+      <p class="note-stamp">I'm a bonjour fellow</p>
     </article>
   `;
 }
