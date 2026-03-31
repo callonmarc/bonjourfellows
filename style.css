@@ -482,17 +482,7 @@ body .grit-overlay--scratches {
 }
 
 .entry-overlay::before {
-  background:
-    conic-gradient(
-      from 40deg,
-      rgba(246, 240, 232, 0),
-      rgba(246, 240, 232, 0.24),
-      rgba(11, 31, 121, 0.1),
-      rgba(186, 31, 52, 0.2),
-      rgba(246, 240, 232, 0)
-    );
-  animation: overlaySweep 6s linear infinite;
-  opacity: 0.65;
+  content: none;
 }
 
 .entry-overlay::after {
