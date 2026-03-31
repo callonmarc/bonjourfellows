@@ -25,15 +25,18 @@ function closeEntryOverlay() {
     entryOverlay.classList.add('is-hidden');
     entryOverlay.classList.remove('is-closing');
     entryOverlay.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('overlay-open');
+    document.body.classList.remove('overlay-open', 'entering-shop');
   };
 
   entryOverlayButton?.setAttribute('disabled', 'true');
+  document.body.classList.add('entering-shop');
   entryOverlay.classList.add('is-closing');
-  document.body.classList.remove('pre-entry');
+  window.setTimeout(() => {
+    document.body.classList.remove('pre-entry');
+  }, 80);
 
   entryOverlay.addEventListener('transitionend', finalizeOverlayClose, { once: true });
-  window.setTimeout(finalizeOverlayClose, 620);
+  window.setTimeout(finalizeOverlayClose, 900);
 }
 
 if (onHomePage && entryOverlay && entryOverlayButton) {
